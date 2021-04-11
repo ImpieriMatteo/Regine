@@ -38,8 +38,15 @@ public class FXMLController {
 
 	@FXML
 	void handleSolve(ActionEvent event) {
-
+		
 		Integer N = spinN.getValue();
+		
+		if(N==2 || N==3) {
+			Label cell = new Label("Rompicapo non risolvibile con "+N+" regine");
+			paneScacchiera.getChildren().clear();
+			paneScacchiera.getChildren().add(cell);
+			return;
+		}
 		
 		// salvo le caselle della scacchiera
 		List<Label> caselle = new ArrayList<Label>();
@@ -89,6 +96,6 @@ public class FXMLController {
 	void initialize() {
 		assert spinN != null : "fx:id=\"spinN\" was not injected: check your FXML file 'Scene.fxml'.";
 		assert paneScacchiera != null : "fx:id=\"paneScacchiera\" was not injected: check your FXML file 'Scene.fxml'.";
-		spinN.setValueFactory(new IntegerSpinnerValueFactory(2, 8));
+		spinN.setValueFactory(new IntegerSpinnerValueFactory(2, 15));
 	}
 }

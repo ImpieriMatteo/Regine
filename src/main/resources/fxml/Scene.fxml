@@ -35,7 +35,7 @@
             </GridPane>
             <StackPane fx:id="paneScacchiera" minHeight="160.0">
                <children>
-                  <Label text="Label" />
+                  <Label />
                </children>
                <VBox.margin>
                   <Insets top="10.0" />
