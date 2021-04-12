@@ -41,13 +41,6 @@ public class FXMLController {
 		
 		Integer N = spinN.getValue();
 		
-		if(N==2 || N==3) {
-			Label cell = new Label("Rompicapo non risolvibile con "+N+" regine");
-			paneScacchiera.getChildren().clear();
-			paneScacchiera.getChildren().add(cell);
-			return;
-		}
-		
 		// salvo le caselle della scacchiera
 		List<Label> caselle = new ArrayList<Label>();
 
@@ -85,9 +78,14 @@ public class FXMLController {
 		if (soluzione != null) {
 			for (int row = 0; row < N; row++) {
 				int col = soluzione.get(row);
-				Label cell = caselle.get(row * N + col);
+				Label cell = caselle.get(col * N + row);
 				cell.setText("♕");
 			}
+		}
+		else {
+			Label cell = new Label("Rompicapo non risolvibile con "+N+" regine");
+			paneScacchiera.getChildren().clear();
+			paneScacchiera.getChildren().add(cell);
 		}
 
 	}
@@ -96,6 +94,6 @@ public class FXMLController {
 	void initialize() {
 		assert spinN != null : "fx:id=\"spinN\" was not injected: check your FXML file 'Scene.fxml'.";
 		assert paneScacchiera != null : "fx:id=\"paneScacchiera\" was not injected: check your FXML file 'Scene.fxml'.";
-		spinN.setValueFactory(new IntegerSpinnerValueFactory(2, 15));
+		spinN.setValueFactory(new IntegerSpinnerValueFactory(2, 20));
 	}
 }

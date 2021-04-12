@@ -5,9 +5,15 @@ import java.util.List;
 
 public class Regine {
 	
+	Integer N;
+	List<Integer> risultato;
+	
 	public List<Integer> risolvi(Integer N){
-		List<Integer> risultato = new ArrayList<Integer>(N);
-		this.cerca(new ArrayList<Integer>(), 0, N, risultato);
+		this.N = N;
+		List<Integer> parziale = new ArrayList<>();
+		this.risultato = null;
+		
+		this.cerca(parziale, 0);
 		return risultato;
 	}
 
@@ -24,48 +30,41 @@ public class Regine {
 	//     [0, 2]
 	//            [0, 2, 1]
 	
-	private void cerca(List<Integer> parziale, Integer livello, Integer N, List<Integer> risultato) {
+	// cerca == true : trovato ; cerca == false : cerca ancora
+	private boolean cerca(List<Integer> parziale, Integer livello) {
 		if(livello==N) {
 			// caso terminale
-			risultato.addAll(parziale);
+			risultato = new ArrayList<>(parziale);
+			return true;
 		} else {
 			for(int colonna=0; colonna<N; colonna++) {
-				if(livello!=0) {
-					// if la mossa nella casella [livello][colonna] è valida
-					// se sì, aggiungi a parziale e fai ricorsione
-					boolean flag = true;
-					
-					for(int i=0; i<livello; i++) {
-						if(parziale.get(i)==colonna)
-							flag = false;
-					}
-					
-					if(flag){
-						for(int i=0; i<livello; i++) {
-							for(int j=1; j<=livello; j++) {
-								if(!flag)
-									break;
-								else if((parziale.get(i)+j==colonna && i+j==livello) || (parziale.get(i)-j==colonna && i+j==livello)) {
-									flag=false;
-									break;
-								}
-							}
-						}
-					}
-					if (flag) {
-						List<Integer> nuovoParziale = new ArrayList<>(N);
-						nuovoParziale.addAll(parziale);
-						nuovoParziale.add(colonna);
-						cerca(nuovoParziale, livello + 1, N, risultato);
-					}
-				}
-				else {
-					List<Integer> nuovoParziale = new ArrayList<>(N);
-					nuovoParziale.add(colonna);
-					cerca(nuovoParziale, livello + 1, N, risultato);
+				// if la mossa nella casella [livello][colonna] è valida
+				// se sì, aggiungi a parziale e fai ricorsione
+				if (posValida(parziale, colonna, livello)) {
+					parziale.add(colonna);
+					boolean trovato = cerca(parziale, livello+1);
+					if(trovato)
+						return true;
+					parziale.remove(parziale.size()-1);
 				}
 			}
+			return false;
 		}
+	}
+	
+	private boolean posValida(List<Integer> parziale, Integer colonna, Integer livello) {
+		//controlla se la regina verrebbe mangiata in verticale
+		if(parziale.contains(colonna))
+			return false;
+		//controlla le diagonali: confronta la posizione (livello, colonna) con (r,c) delle regine esistenti
+		for(int r=0; r<livello; r++) {
+			int c = parziale.get(r);
+			
+			if(r+c == livello+colonna || r-c == livello-colonna)
+				return false;
+		}
+		
+		return true;
 	}
 	
 	
